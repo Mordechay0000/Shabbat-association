@@ -34,4 +34,11 @@
         android:layout_height="match_parent"
         android:indeterminate="true" />
 
+    <ImageView
+        android:id="@+id/main_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:srcCompat="@tools:sample/avatars" />
+
 </LinearLayout>
