@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public final class MySecretCodeReceiver extends BroadcastReceiver {
+public final class SecretCodeReceiverToMainActivity extends BroadcastReceiver {
     public static final String SECRET_CODE_ACTION = "android.provider.Telephony.SECRET_CODE";
     public static final String TAG = "secretCodeReceiver";
 
