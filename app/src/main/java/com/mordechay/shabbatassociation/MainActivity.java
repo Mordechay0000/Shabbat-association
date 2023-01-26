@@ -20,18 +20,17 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 
     private ProgressBar prg;
+    private ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         prg = findViewById(R.id.main_progress);
+        img = findViewById(R.id.main_img);
 
         String[] list = readFile();
         sendCommand(list);
-        ImageView img = findViewById(R.id.main_img);
-        prg.setVisibility(View.GONE);
-        img.setVisibility(View.VISIBLE);
     }
 
     private String[] readFile() {
@@ -79,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        prg.setVisibility(View.GONE);
+        img.setVisibility(View.VISIBLE);
     }
 }
 

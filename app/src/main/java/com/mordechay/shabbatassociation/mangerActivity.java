@@ -3,6 +3,8 @@ package com.mordechay.shabbatassociation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,19 +13,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class mangerActivity extends AppCompatActivity {
+public class mangerActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private Button btnEnableApp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manger);
 
+btnEnableApp = findViewById(R.id.manger_btn_enable_app);
+btnEnableApp.setOnClickListener(this);
 
+    }
 
+    public void enableAPP(){
         String[] list = readFile();
         sendCommand(list);
     }
-
 
     private String[] readFile() {
         String[] str = null;
@@ -70,5 +76,11 @@ public class mangerActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == btnEnableApp)
+            enableAPP();
     }
 }
