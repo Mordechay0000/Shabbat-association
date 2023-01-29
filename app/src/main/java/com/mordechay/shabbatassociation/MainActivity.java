@@ -1,11 +1,14 @@
 package com.mordechay.shabbatassociation;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -78,8 +81,27 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        prg.setVisibility(View.GONE);
-        img.setVisibility(View.VISIBLE);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // your task to be executed after 5 seconds
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prg.setVisibility(View.GONE);
+                        img.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
     }
+
+
 }
 
