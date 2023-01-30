@@ -4,13 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".mangerActivity">
+
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="שלום"
+        android:text="הסתר אפליקציות נבחרות" />
 
     <Button
         android:id="@+id/manger_btn_enable_app"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="שחזר אפליקציות"
+        android:text="שחזר אֻפליקציות"
         tools:layout_editor_absoluteX="214dp"
         tools:layout_editor_absoluteY="140dp" />
+
+    <Button
+        android:id="@+id/manger_btn_import_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="יבא קובץ"
+        tools:layout_editor_absoluteX="214dp"
+        tools:layout_editor_absoluteY="140dp" />
+
+    <Button
+        android:id="@+id/manger_btn_export_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="יצא קובץ"
+        tools:layout_editor_absoluteX="214dp"
+        tools:layout_editor_absoluteY="140dp" />
+
 </LinearLayout>
