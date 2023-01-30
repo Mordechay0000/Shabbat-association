@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] readFile() {
         String[] str = null;
         try {
-            FileInputStream fis = new FileInputStream(new File(getFilesDir(),"file.txt"));
+            FileInputStream fis = new FileInputStream(new File(getFilesDir(),Data.FILE_NAME));
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
