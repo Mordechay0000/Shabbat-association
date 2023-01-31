@@ -12,7 +12,9 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="סטטוס" />
+        android:text="סטטוס"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/manger_txt_status"
@@ -51,7 +53,9 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="תוכן הקובץ שנבחר" />
+        android:text="תוכן הקובץ שנבחר:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/manger_txt_file_view"
