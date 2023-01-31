@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -27,6 +28,7 @@ import java.util.Locale;
 
 public class mangerActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private TextView txtStatus;
     private Button btnEnableApp;
     private Button btnImportFile;
     private Button btnExportFile;
@@ -38,6 +40,7 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manger);
 
+        txtStatus = findViewById(R.id.manger_txt_status);
         btnEnableApp = findViewById(R.id.manger_btn_enable_app);
         btnEnableApp.setOnClickListener(this);
         btnImportFile = findViewById(R.id.manger_btn_import_file);
@@ -49,18 +52,23 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadingFileView() {
+        txtStatus.setText(txtStatus.getText()+ "\n" + "טוען תצוגת קובץ...");
         String[] txtFile = readFileForEnableApp();
         if(txtFile != null) {
             for (String listApp : txtFile) {
                 txtViewFile.setText(txtViewFile.getText() + listApp + "\n");
             }
+            txtStatus.setText(txtStatus.getText()+ "\n" + "הקובץ נטען");
         }else{
             txtViewFile.setText("לא נמצא קובץ.");
+            txtStatus.setText(txtStatus.getText()+ "\n" + "לא נמצא קובץ");
         }
     }
 
     public void enableAPP(){
+        txtStatus.setText(txtStatus.getText()+ "\n" + "קורא קובץ");
         String[] list = readFileForEnableApp();
+        txtStatus.setText(txtStatus.getText()+ "\n" + "שולח פקודות לשחרור אפליקציות");
         sendCommand(list);
     }
 
@@ -91,16 +99,19 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
         try {
             p = Runtime.getRuntime().exec("su");
             os = new DataOutputStream(p.getOutputStream());
+            txtStatus.setText(txtStatus.getText()+ "\n" + "התקבל הרשאת root (רוט/שורש)");
         } catch (IOException e) {
             e.printStackTrace();
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בקבלת הרשאת root (רוט/שורש)");
         }
-
+        txtStatus.setText(txtStatus.getText()+ "\n" + "משחרר אפליקציות");
         for (String app : list) {
             try {
 
                 assert os != null;
                 os.writeBytes("pm " + "enable " + app + "\n");
             } catch (IOException e) {
+                txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בשליחת פקודה לשחרור האפליקציות, הפקודה: " + "pm " + "enable " + app);
                 throw new RuntimeException(e);
             }
         }
@@ -109,6 +120,7 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
             os.writeBytes("exit\n");
             os.flush();
         } catch (IOException e) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה ביציאה מהטרמינל");
             throw new RuntimeException(e);
         }
     }
@@ -116,10 +128,13 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if(v == btnEnableApp) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "מתחיל בשרור אפליקציות");
             enableAPP();
         } else if (v == btnImportFile) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת קובץ לייבוא");
             importFile();
         } else if (v == btnExportFile) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת נתיב לשמירת הקובץ המיוצא");
             exportFile();
         }
     }
@@ -138,6 +153,7 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
     ActivityResultLauncher<Intent> openActivityForImportFile = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     // There are no request codes
                     Intent data = result.getData();
@@ -145,12 +161,17 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
                     if (data != null) {
                         uri = data.getData();
                         saveFileToInternalStorage(uri);
+                    }else {
+                        txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בקבלת נתיב הקובץ");
                     }
+                }else {
+                    txtStatus.setText(txtStatus.getText()+ "\n" + "לא נבחר קובץ");
                 }
             });
 
 
     private void saveFileToInternalStorage(Uri fileUri) {
+        txtStatus.setText(txtStatus.getText()+ "\n" + "מייבא קובץ");
         try {
             InputStream inputStream = getContentResolver().openInputStream(fileUri);
             FileOutputStream fileOutputStream = new FileOutputStream(new File(getFilesDir(), Data.FILE_NAME));
@@ -161,7 +182,9 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
             }
             fileOutputStream.close();
             inputStream.close();
+            txtStatus.setText(txtStatus.getText()+ "\n" + "הקובץ יובא בהצלחה");
         } catch (Exception e) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בייבוא קובץ");
             e.printStackTrace();
         }
         loadingFileView();
@@ -186,11 +209,16 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
                     if (data != null) {
                         uri = data.getData();
                         saveFileToExternalStorage(uri);
+                    } else {
+                        txtStatus.setText(txtStatus.getText() + "\n" + "שגיאה בקבלת נתיב הקובץ");
                     }
-                }
-            });
+                } else {
+                    txtStatus.setText(txtStatus.getText()+ "\n" + "לא נבחר קובץ");
+            }}
+    );
 
     private void saveFileToExternalStorage(Uri fileUri) {
+        txtStatus.setText(txtStatus.getText()+ "\n" + "מייצא קובץ");
         try {
             InputStream inputStream = getContentResolver().openInputStream(Uri.fromFile(new File(getFilesDir(), Data.FILE_NAME)));
             OutputStream outputStream = getContentResolver().openOutputStream(fileUri);
@@ -201,7 +229,9 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
             }
             outputStream.close();
             inputStream.close();
+            txtStatus.setText(txtStatus.getText()+ "\n" + "הקובץ יוצא בהצלחה");
         } catch (Exception e) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בייצוא קובץ");
             e.printStackTrace();
         }
     }
