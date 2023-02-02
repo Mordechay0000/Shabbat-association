@@ -1,5 +1,6 @@
 package com.mordechay.shabbatassociation;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@SuppressLint("SetTextI18n")
 public class mangerActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView txtStatus;

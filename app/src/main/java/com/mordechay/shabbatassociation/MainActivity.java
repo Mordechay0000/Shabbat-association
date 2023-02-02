@@ -1,17 +1,11 @@
 package com.mordechay.shabbatassociation;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendCommand(String[] list) {
-        Process p = null;
+        Process p;
         DataOutputStream os = null;
 
         try {
@@ -69,38 +63,35 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < list.length; i++) {
+        for (String appPackageName : list) {
             try {
-
-                os.writeBytes("pm " + "disable " + list[i] + "\n");
+                if (os != null) {
+                    os.writeBytes("pm " + "disable " + appPackageName + "\n");
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
         try {
-            os.writeBytes("exit\n");
-            os.flush();
+            if (os != null) {
+                os.writeBytes("exit\n");
+                os.flush();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // your task to be executed after 5 seconds
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prg.setVisibility(View.GONE);
-                        img.setVisibility(View.VISIBLE);
-                    }
-                });
+        new Thread(() -> {
+            // your task to be executed after 5 seconds
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            runOnUiThread(() -> {
+                prg.setVisibility(View.GONE);
+                img.setVisibility(View.VISIBLE);
+            });
         }).start();
     }
 
