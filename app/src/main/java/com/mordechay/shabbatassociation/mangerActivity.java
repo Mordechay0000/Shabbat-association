@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -68,8 +67,12 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
     public void enableAPP(){
         txtStatus.setText(txtStatus.getText()+ "\n" + "קורא קובץ");
         String[] list = readFileForEnableApp();
-        txtStatus.setText(txtStatus.getText()+ "\n" + "שולח פקודות לשחרור אפליקציות");
-        sendCommand(list);
+        if(list != null) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שולח פקודות לשחרור אפליקציות");
+            sendCommand(list);
+        }else{
+            txtStatus.setText(txtStatus.getText()+ "\n" + "לא נמצא קובץ לשחרור האפליקציות");
+        }
     }
 
     private String[] readFileForEnableApp() {

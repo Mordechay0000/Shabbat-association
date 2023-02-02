@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         img = findViewById(R.id.main_img);
 
         String[] list = readFile();
-        sendCommand(list);
+        if (list != null) {
+            sendCommand(list);
+        }
     }
 
     private String[] readFile() {
