@@ -20,6 +20,7 @@
         android:id="@+id/manger_txt_status"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:scrollbars="horizontal|vertical"
         android:text="התחלה" />
 
     <Button
@@ -71,6 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:scrollbars="horizontal|vertical" />
 
 </LinearLayout>
