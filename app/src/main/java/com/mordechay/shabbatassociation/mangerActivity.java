@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,29 +34,52 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnEnableApp;
     private Button btnImportFile;
     private Button btnExportFile;
+    private Button btnDeleteFile;
     private TextView txtViewFile;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manger);
 
         txtStatus = findViewById(R.id.manger_txt_status);
+        txtStatus.setMovementMethod(new ScrollingMovementMethod());
         btnEnableApp = findViewById(R.id.manger_btn_enable_app);
         btnEnableApp.setOnClickListener(this);
         btnImportFile = findViewById(R.id.manger_btn_import_file);
         btnImportFile.setOnClickListener(this);
         btnExportFile = findViewById(R.id.manger_btn_export_file);
         btnExportFile.setOnClickListener(this);
+        btnDeleteFile = findViewById(R.id.manger_btn_delete_file);
+        btnDeleteFile.setOnClickListener(this);
         txtViewFile = findViewById(R.id.manger_txt_file_view);
+        txtViewFile.setMovementMethod(new ScrollingMovementMethod());
         loadingFileView();
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        if(v == btnEnableApp) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "מתחיל בשחרור אפליקציות");
+            enableAPP();
+        } else if (v == btnImportFile) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת קובץ לייבוא");
+            importFile();
+        } else if (v == btnExportFile) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת נתיב לשמירת הקובץ המיוצא");
+            exportFile();
+        }else if (v == btnDeleteFile) {
+            txtStatus.setText(txtStatus.getText()+ "\n" + "מוחק קובץ");
+            deleteFile();
+        }
     }
 
     private void loadingFileView() {
         txtStatus.setText(txtStatus.getText()+ "\n" + "טוען תצוגת קובץ...");
         String[] txtFile = readFileForEnableApp();
         if(txtFile != null) {
+            txtViewFile.setText("");
             for (String listApp : txtFile) {
                 txtViewFile.setText(txtViewFile.getText() + listApp + "\n");
             }
@@ -79,20 +103,23 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
 
     private String[] readFileForEnableApp() {
         String[] str = null;
-        try {
-            FileInputStream fis = new FileInputStream(new File(getFilesDir(),Data.FILE_NAME));
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
+        File file = new File(getFilesDir(),Data.FILE_NAME);
+        if(file.exists()){
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                }
+                fis.close();
+                str = sb.toString().split("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            fis.close();
-            str = sb.toString().split("\n");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return str;
     }
@@ -129,24 +156,6 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void onClick(View v) {
-        if(v == btnEnableApp) {
-            txtStatus.setText(txtStatus.getText()+ "\n" + "מתחיל בשרור אפליקציות");
-            enableAPP();
-        } else if (v == btnImportFile) {
-            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת קובץ לייבוא");
-            importFile();
-        } else if (v == btnExportFile) {
-            txtStatus.setText(txtStatus.getText()+ "\n" + "בחירת נתיב לשמירת הקובץ המיוצא");
-            exportFile();
-        }
-    }
-
-
-
-
 
     public void importFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -239,6 +248,17 @@ public class mangerActivity extends AppCompatActivity implements View.OnClickLis
             txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה בייצוא קובץ");
             e.printStackTrace();
         }
+    }
+
+    private void deleteFile() {
+        File file = new File(getFilesDir(), Data.FILE_NAME);
+        boolean deleted = file.delete();
+        if(deleted) {
+            txtStatus.setText(txtStatus.getText() + "\n" + "הקובץ נמחק בהצלחה");
+        }else{
+            txtStatus.setText(txtStatus.getText()+ "\n" + "שגיאה במחיקת הקובץ");
+        }
+        loadingFileView();
     }
 
 }
