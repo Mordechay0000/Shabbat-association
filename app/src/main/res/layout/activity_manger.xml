@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/manger_txt_status"
         android:layout_width="match_parent"
-        android:layout_height="69dp"
+        android:layout_height="150dp"
         android:text="התחלה" />
 
     <Button
@@ -46,6 +46,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="יצא קובץ"
+        tools:layout_editor_absoluteX="214dp"
+        tools:layout_editor_absoluteY="140dp" />
+
+    <Button
+        android:id="@+id/manger_btn_delete_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="מחק קובץ"
         tools:layout_editor_absoluteX="214dp"
         tools:layout_editor_absoluteY="140dp" />
 
